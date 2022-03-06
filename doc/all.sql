@@ -6,3 +6,9 @@ create table `test`(
     `password` varchar(50) comment 'password',
     primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='Test'
+
+insert into `test` (id,name,password) values
+    (1,'Eason','123'),
+    (2,'Timi','timi'),
+    (3,'AA','aa'),
+    (4,'wang','111');
