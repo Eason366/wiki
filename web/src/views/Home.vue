@@ -55,8 +55,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import axios from 'axios';
 export default defineComponent({
   name: 'Home',
+  setup(){
+    console.log("setup");
+    axios.get("http://localhost:0418/ebook/list?name=Python").then((response)=>{
+      console.log(response);
+    })
+  }
 });
 </script>
