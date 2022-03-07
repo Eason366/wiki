@@ -1,7 +1,8 @@
 package com.eason.wiki.controller;
 
-import com.eason.wiki.domain.Ebook;
+import com.eason.wiki.req.EbookReq;
 import com.eason.wiki.resp.CommonResp;
+import com.eason.wiki.resp.EbookResp;
 import com.eason.wiki.service.EbookService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,10 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp list(){
+    public CommonResp list(EbookReq req){
 
-        CommonResp<List<Ebook>> resp = new CommonResp<>();
-        List<Ebook> list =  ebookService.list();
+        CommonResp<List<EbookResp>> resp = new CommonResp<>();
+        List<EbookResp> list =  ebookService.list(req);
         resp.setContent(list);
         return resp;
     }
