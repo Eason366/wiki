@@ -72,13 +72,6 @@
 import { defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 
-
-
-
-
-
-
-
 export default defineComponent({
   name: 'Home',
   setup(){
