@@ -5,6 +5,11 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '730px' }"
     >
+
+      <a-button type="primary" @click="add()" size="large">
+        New Blog
+      </a-button>
+
       <a-table
           :columns="columns"
           :row-key="record => record.id"
@@ -175,6 +180,13 @@ export default defineComponent({
       ebook.value = record
     };
 
+    /**
+     * add
+     */
+    const add = () => {
+      modalVisible.value = true;
+      ebook.value = {};
+    };
 
     onMounted(() => {
       handleQuery({
@@ -191,6 +203,8 @@ export default defineComponent({
       handleTableChange,
 
       edit,
+      add,
+
       ebook,
       modalVisible,
       modalLoading,

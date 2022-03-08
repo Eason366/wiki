@@ -9,6 +9,7 @@ import com.eason.wiki.req.EbookSaveReq;
 import com.eason.wiki.resp.EbookQueryResp;
 import com.eason.wiki.resp.PageResp;
 import com.eason.wiki.util.CopyUtil;
+import com.eason.wiki.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<EbookQueryResp> list(EbookQueryReq req){
         EbookExample ebookExample = new EbookExample();
@@ -53,6 +56,7 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req,Ebook.class);
         if (ObjectUtils.isEmpty(req.getId())){
             //insert
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
         }else {
             // update
