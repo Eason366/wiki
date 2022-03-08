@@ -6,6 +6,7 @@ import com.eason.wiki.domain.EbookExample;
 import com.eason.wiki.mapper.EbookMapper;
 import com.eason.wiki.req.EbookReq;
 import com.eason.wiki.resp.EbookResp;
+import com.eason.wiki.resp.PageResp;
 import com.eason.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,18 +30,22 @@ public class EbookService {
     private EbookMapper ebookMapper;
 
 
-    public List<EbookResp> list(EbookReq req){
+    public PageResp<EbookResp> list(EbookReq req){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName()))
             criteria.andNameLike("%"+req.getName()+"%");
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(req.getPage(),req.getSize());
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
         LOG.info("Total length: {}",pageInfo.getTotal());
         LOG.info("Total pages: {}",pageInfo.getPages());
 
+
         List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        return  list;
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
+        return  pageResp;
     }
 }
