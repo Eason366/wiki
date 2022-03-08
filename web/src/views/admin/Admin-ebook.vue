@@ -18,7 +18,7 @@
             <a-button type="primary">
               Edit
             </a-button>
-            <a-button type="danger">
+            <a-button type="primary" danger>
               Delete
             </a-button>
           </a-space>
@@ -39,7 +39,7 @@ export default defineComponent({
     const ebooks = ref();
     const pagination = ref({
       current: 1,
-      pageSize: 10,
+      pageSize: 3,
       total: 0
     });
     const loading = ref(false);
@@ -83,13 +83,19 @@ export default defineComponent({
      **/
     const handleQuery = (params: any) => {
       loading.value = true;
-      axios.get("/ebook/list", params).then((response) => {
+      axios.get("/ebook/list", {
+        params : {
+          page : params.page,
+          size : params.size
+        }
+      }).then((response) => {
         loading.value = false;
         const data = response.data;
-        ebooks.value = data.content;
+        ebooks.value = data.content.list;
 
         // Reset pagination buttons
         pagination.value.current = params.page;
+        pagination.value.total = data.content.total;
       });
     };
 
@@ -105,7 +111,10 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      handleQuery({});
+      handleQuery({
+        page: pagination.value.current,
+        size: pagination.value.pageSize
+      });
     });
 
     return {
