@@ -4,20 +4,19 @@ package com.eason.wiki.service;
 import com.eason.wiki.domain.Ebook;
 import com.eason.wiki.domain.EbookExample;
 import com.eason.wiki.mapper.EbookMapper;
-import com.eason.wiki.req.EbookReq;
-import com.eason.wiki.resp.EbookResp;
+import com.eason.wiki.req.EbookQueryReq;
+import com.eason.wiki.req.EbookSaveReq;
+import com.eason.wiki.resp.EbookQueryResp;
 import com.eason.wiki.resp.PageResp;
 import com.eason.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,7 +29,7 @@ public class EbookService {
     private EbookMapper ebookMapper;
 
 
-    public PageResp<EbookResp> list(EbookReq req){
+    public PageResp<EbookQueryResp> list(EbookQueryReq req){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName()))
@@ -42,10 +41,23 @@ public class EbookService {
         LOG.info("Total pages: {}",pageInfo.getPages());
 
 
-        List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        List<EbookQueryResp> list = CopyUtil.copyList(ebookList, EbookQueryResp.class);
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return  pageResp;
     }
+
+
+    public void save(EbookSaveReq req){
+        Ebook ebook = CopyUtil.copy(req,Ebook.class);
+        if (ObjectUtils.isEmpty(req.getId())){
+            //insert
+            ebookMapper.insert(ebook);
+        }else {
+            // update
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
+    }
+
 }

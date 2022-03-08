@@ -1,6 +1,6 @@
-package com.eason.wiki.resp;
+package com.eason.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;
