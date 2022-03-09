@@ -6,10 +6,30 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '730px' }"
     >
 
-      <a-button type="primary" @click="add()" size="large">
-        New Blog
-      </a-button>
 
+      <a-form
+          layout="inline"
+          :model="searchName"
+      >
+        <a-form-item>
+          <a-input v-model:value="searchName.name" placeholder="searchName">
+            <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+          </a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" @click="handleQuery({
+          page : 1,
+          size : pagination.pageSize,
+          name : searchName})" >
+            Search
+          </a-button>
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" @click="add()" >
+            New Blog
+          </a-button>
+        </a-form-item>
+      </a-form>
       <a-table
           :columns="columns"
           :row-key="record => record.id"
@@ -83,6 +103,9 @@ import { message } from 'ant-design-vue';
 export default defineComponent({
   name: 'AdminEbook',
   setup() {
+
+    const searchName = ref();
+    searchName.value = {};
     const ebooks = ref();
     const pagination = ref({
       current: 1,
@@ -133,7 +156,8 @@ export default defineComponent({
       axios.get("/ebook/list", {
         params : {
           page : params.page,
-          size : params.size
+          size : params.size,
+          name : searchName.value.name
         }
       }).then((response) => {
         loading.value = false;
@@ -215,6 +239,7 @@ export default defineComponent({
       });
     };
 
+
     onMounted(() => {
       handleQuery({
         page: pagination.value.current,
@@ -227,11 +252,14 @@ export default defineComponent({
       pagination,
       columns,
       loading,
+      searchName,
       handleTableChange,
 
       edit,
       add,
       del,
+      handleQuery,
+
 
       ebook,
       modalVisible,
