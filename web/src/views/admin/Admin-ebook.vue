@@ -99,11 +99,11 @@
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
+import { Tool } from '@/util/Tool';
 
 export default defineComponent({
   name: 'AdminEbook',
   setup() {
-
     const searchName = ref();
     searchName.value = {};
     const ebooks = ref();
@@ -211,7 +211,7 @@ export default defineComponent({
      */
     const edit = (record: any) => {
       modalVisible.value = true;
-      ebook.value = record
+      ebook.value = Tool.copy(record)
     };
 
     /**
