@@ -28,7 +28,6 @@
                 ok-text="Yes"
                 cancel-text="No"
                 @confirm="del(record.id)"
-                @cancel="cancel"
             >
               <a-button danger>
                 Delete
