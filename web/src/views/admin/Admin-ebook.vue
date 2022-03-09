@@ -23,9 +23,17 @@
             <a-button type="primary" @click="edit(record)">
               Edit
             </a-button>
-            <a-button type="primary" danger>
-              Delete
-            </a-button>
+            <a-popconfirm
+                title="Are you sure delete this Blog?"
+                ok-text="Yes"
+                cancel-text="No"
+                @confirm="del(record.id)"
+                @cancel="cancel"
+            >
+              <a-button danger>
+                Delete
+              </a-button>
+            </a-popconfirm>
           </a-space>
         </template>
       </a-table>
@@ -71,6 +79,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'AdminEbook',
@@ -163,7 +172,6 @@ export default defineComponent({
           modalVisible.value = false;
           modalLoading.value = false;
         }
-
         // reload data
         handleQuery({
           page: pagination.value.current,
@@ -188,6 +196,23 @@ export default defineComponent({
       ebook.value = {};
     };
 
+    /**
+     * delete
+     */
+    const del = (id : number) => {
+      axios.delete("/ebook/delete/"+id).then((response) => {
+        const data = response.data;
+        if (data.success){
+          // reload data
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+          message.success('Delete Blog Success!');
+        }
+      });
+    };
+
     onMounted(() => {
       handleQuery({
         page: pagination.value.current,
@@ -204,6 +229,7 @@ export default defineComponent({
 
       edit,
       add,
+      del,
 
       ebook,
       modalVisible,
