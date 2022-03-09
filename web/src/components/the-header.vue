@@ -9,8 +9,11 @@
       <a-menu-item key="home">
         <router-link to="/">Home</router-link>
       </a-menu-item>
-      <a-menu-item key="admin">
-        <router-link to="/admin/ebook">Admin</router-link>
+      <a-menu-item key="AdminEbook">
+        <router-link to="/admin/ebook">Ebook Admin</router-link>
+      </a-menu-item>
+      <a-menu-item key="AdminCategory">
+        <router-link to="/admin/category">Category Admin</router-link>
       </a-menu-item>
       <a-menu-item key="about">
         <router-link to="/about">About</router-link>

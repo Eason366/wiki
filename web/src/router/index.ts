@@ -20,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AdminEbook',
     component: () => import(/* webpackChunkName: "about" */ '../views/admin/Admin-ebook.vue')
   },
+  {
+    path: '/admin/category',
+    name: 'AdminCategory',
+    component: () => import(/* webpackChunkName: "about" */ '../views/admin/Admin-category.vue')
+  },
 ]
 
 const router = createRouter({
