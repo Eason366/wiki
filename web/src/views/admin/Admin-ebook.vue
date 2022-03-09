@@ -29,7 +29,7 @@
                 cancel-text="No"
                 @confirm="del(record.id)"
             >
-              <a-button danger>
+              <a-button type="primary" danger>
                 Delete
               </a-button>
             </a-popconfirm>
@@ -166,16 +166,19 @@ export default defineComponent({
     const handleOk = () => {
       modalLoading.value = true;
       axios.post("/ebook/save", ebook.value).then((response) => {
+        modalLoading.value = false;
         const data = response.data;
         if (data.success){
           modalVisible.value = false;
-          modalLoading.value = false;
+          // reload data
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        }else {
+          message.error(data.message);
         }
-        // reload data
-        handleQuery({
-          page: pagination.value.current,
-          size: pagination.value.pageSize
-        });
+        modalLoading.value = false;
       });
     };
 
