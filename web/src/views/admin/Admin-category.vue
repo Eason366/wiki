@@ -62,10 +62,15 @@
         <a-input v-model:value="category.name" />
       </a-form-item>
       <a-form-item label="Parent Category">
-        <a-input v-model:value="category.parent" />
-      </a-form-item>
-      <a-form-item label="Sort">
-        <a-input v-model:value="category.sort" />
+        <a-select
+            ref="select"
+            v-model:value="category.parent"
+        >
+          <a-select-option value="0">New Category</a-select-option>
+          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="c.id===category.id">
+            {{ c.name }}
+          </a-select-option>
+        </a-select>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -92,10 +97,6 @@ export default defineComponent({
       {
         title: 'name',
         dataIndex: 'name'
-      },
-      {
-        title: 'parent',
-        dataIndex: 'parent'
       },
       {
         title: 'Action',

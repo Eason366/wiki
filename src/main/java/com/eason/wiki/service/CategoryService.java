@@ -34,7 +34,7 @@ public class CategoryService {
 
     public PageResp<CategoryQueryResp> list(CategoryQueryReq req){
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.setOrderByClause("sort asc");
+        categoryExample.setOrderByClause("name asc");
         PageHelper.startPage(req.getPage(),req.getSize());
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
         PageInfo<Category> pageInfo = new PageInfo<>(categoryList);
@@ -52,7 +52,7 @@ public class CategoryService {
 
     public List<CategoryQueryResp> all(){
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.setOrderByClause("sort asc");
+        categoryExample.setOrderByClause("name asc");
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
 
 
