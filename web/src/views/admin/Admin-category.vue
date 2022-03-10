@@ -5,28 +5,13 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '230px' }"
     >
-
-
       <a-form
           layout="inline"
           :model="searchName"
       >
         <a-form-item>
-          <a-input v-model:value="searchName.name" placeholder="searchName">
-            <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
-          </a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-button type="primary" @click="handleQuery({
-          page : 1,
-          size : pagination.pageSize,
-          name : searchName})" >
-            Search
-          </a-button>
-        </a-form-item>
-        <a-form-item>
           <a-button type="primary" @click="add()" >
-            New Blog
+            New
           </a-button>
         </a-form-item>
       </a-form>
@@ -34,9 +19,8 @@
           :columns="columns"
           :row-key="record => record.id"
           :data-source="categorys"
-          :pagination="pagination"
+          :pagination="false"
           :loading="loading"
-          @change="handleTableChange"
       >
         <template v-slot:action="{ text, record }">
           <a-space size="small">
@@ -44,7 +28,7 @@
               Edit
             </a-button>
             <a-popconfirm
-                title="Are you sure delete this Blog?"
+                title="Are you sure delete this Category?"
                 ok-text="Yes"
                 cancel-text="No"
                 @confirm="del(record.id)"
@@ -101,11 +85,6 @@ export default defineComponent({
     const searchName = ref();
     searchName.value = {};
     const categorys = ref();
-    const pagination = ref({
-      current: 1,
-      pageSize: 8,
-      total: 0
-    });
     const loading = ref(false);
 
     const columns = [
@@ -128,35 +107,16 @@ export default defineComponent({
     /**
      * data Query
      **/
-    const handleQuery = (params: any) => {
+    const handleQuery = () => {
       loading.value = true;
-      axios.get("/category/list", {
-        params : {
-          page : params.page,
-          size : params.size,
-          name : searchName.value.name
-        }
-      }).then((response) => {
+      axios.get("/category/all").then((response) => {
         loading.value = false;
         const data = response.data;
-        categorys.value = data.content.list;
-
-        // Reset pagination buttons
-        pagination.value.current = params.page;
-        pagination.value.total = data.content.total;
+        categorys.value = data.content;
       });
     };
 
-    /**
-     * Triggered when the page number is clicked
-     */
-    const handleTableChange = (pagination: any) => {
-      //console.log("Clicked Success");
-      handleQuery({
-        page: pagination.current,
-        size: pagination.pageSize
-      });
-    };
+
     // -------- model ---------
     const category = ref({});
     const modalVisible = ref(false);
@@ -172,10 +132,7 @@ export default defineComponent({
         if (data.success){
           modalVisible.value = false;
           // reload data
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
+          handleQuery();
         }else {
           message.error(data.message);
         }
@@ -207,30 +164,22 @@ export default defineComponent({
         const data = response.data;
         if (data.success){
           // reload data
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
-          message.success('Delete Blog Success!');
+          handleQuery();
+          message.success('Delete Category Success!');
         }
       });
     };
 
 
     onMounted(() => {
-      handleQuery({
-        page: pagination.value.current,
-        size: pagination.value.pageSize
-      });
+      handleQuery();
     });
 
     return {
       categorys,
-      pagination,
       columns,
       loading,
       searchName,
-      handleTableChange,
 
       edit,
       add,

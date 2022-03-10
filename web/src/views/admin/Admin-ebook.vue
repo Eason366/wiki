@@ -26,7 +26,7 @@
         </a-form-item>
         <a-form-item>
           <a-button type="primary" @click="add()" >
-            New Blog
+            New
           </a-button>
         </a-form-item>
       </a-form>
@@ -44,7 +44,7 @@
               Edit
             </a-button>
             <a-popconfirm
-                title="Are you sure delete this Blog?"
+                title="Are you sure delete this Ebook?"
                 ok-text="Yes"
                 cancel-text="No"
                 @confirm="del(record.id)"
@@ -234,7 +234,7 @@ export default defineComponent({
             page: pagination.value.current,
             size: pagination.value.pageSize
           });
-          message.success('Delete Blog Success!');
+          message.success('Delete Ebook Success!');
         }
       });
     };
