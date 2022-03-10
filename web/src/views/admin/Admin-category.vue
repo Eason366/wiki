@@ -18,7 +18,7 @@
       <a-table
           :columns="columns"
           :row-key="record => record.id"
-          :data-source="categorys"
+          :data-source="level1"
           :pagination="false"
           :loading="loading"
       >
@@ -86,7 +86,7 @@ export default defineComponent({
     searchName.value = {};
     const categorys = ref();
     const loading = ref(false);
-
+    const level1 = ref();
     const columns = [
 
       {
@@ -113,6 +113,8 @@ export default defineComponent({
         loading.value = false;
         const data = response.data;
         categorys.value = data.content;
+        level1.value = [];
+        level1.value = Tool.array2Tree(categorys.value,0)
       });
     };
 
@@ -176,7 +178,8 @@ export default defineComponent({
     });
 
     return {
-      categorys,
+      //categorys,
+      level1,
       columns,
       loading,
       searchName,
