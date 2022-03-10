@@ -99,6 +99,10 @@ export default defineComponent({
         dataIndex: 'name'
       },
       {
+        title: 'parent',
+        dataIndex: 'parent'
+      },
+      {
         title: 'Action',
         key: 'action',
         slots: { customRender: 'action' }
