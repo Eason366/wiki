@@ -38,6 +38,11 @@
           :loading="loading"
           @change="handleTableChange"
       >
+        <template v-slot:category="{ text, record }">
+          <span>
+            {{ getCategoryName(record.category1Id) }} / {{ getCategoryName(record.category2Id) }}
+          </span>
+        </template>
         <template v-slot:action="{ text, record }">
           <a-space size="small">
             <a-button type="primary" @click="edit(record)">
@@ -123,13 +128,8 @@ export default defineComponent({
         dataIndex: 'name'
       },
       {
-        title: 'category1Id',
-        key: 'category1Id',
-        dataIndex: 'category1Id'
-      },
-      {
-        title: 'category2Id',
-        dataIndex: 'category2Id'
+        title: 'category',
+        slots: { customRender: 'category' }
       },
       {
         title: 'docCount',
@@ -181,6 +181,18 @@ export default defineComponent({
         page: pagination.current,
         size: pagination.pageSize
       });
+    };
+
+    const getCategoryName = (cid: number) => {
+      // console.log(cid)
+      let result = "";
+      categorys.forEach((item: any) => {
+        if (item.id === cid) {
+          // return item.name; // 注意，这里直接return不起作用
+          result = item.name;
+        }
+      });
+      return result;
     };
     // -------- model ---------
     const categoryID = ref();
@@ -248,6 +260,7 @@ export default defineComponent({
     };
 
     const level1 = ref();
+    let categorys : any;
     /**
      * category Query
      **/
@@ -256,7 +269,7 @@ export default defineComponent({
       axios.get("/category/all").then((response) => {
         loading.value = false;
         const data = response.data;
-        const categorys = data.content;
+        categorys = data.content;
         level1.value = [];
         level1.value = Tool.array2Tree(categorys,0)
         console.log("level1: ",level1)
@@ -283,6 +296,7 @@ export default defineComponent({
       add,
       del,
       handleQuery,
+      getCategoryName,
 
       categoryID,
       level1,
